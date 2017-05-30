@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html ng-app="iwwmApp">
+    <head>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+        <script src="js/iwwm.js"></script>
+        <style>
+            .movie-list {
+                list-style-type: none;
+                margin: 0;
+                padding: 0;
+            }
+            .movie-list li {
+                padding: 4px;
+                margin: 0 0 4px 0;
+                background-color: #aaa;
+                border-radius: 4px;
+                font-size: 1.5em;
+            }
+        </style>
+    </head>
+    <body ng-controller="iwwmController">
+        <h1>test</h1>
+        <ul class="movie-list">
+            <li ng-repeat="movie in movies">{{movie.Start}} - {{movie.Title}}</li>
+        </ul>
+    </body>
+</html>
