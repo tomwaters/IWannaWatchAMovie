@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html ng-app="iwwmApp">
     <head>
-        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.4/angular.min.js"></script>
         <script src="js/iwwm.js"></script>
         <style>
             .movie-list {
@@ -21,7 +21,7 @@
     <body ng-controller="iwwmController">
         <h1>test</h1>
         <ul class="movie-list">
-            <li ng-repeat="movie in movies">{{movie.Start}} - {{movie.Title}}</li>
+            <li ng-repeat="movie in movies">{{movie.Start | date :'shortTime'}} - {{movie.Title}}</li>
         </ul>
     </body>
 </html>

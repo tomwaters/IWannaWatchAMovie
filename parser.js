@@ -75,12 +75,9 @@ module.exports = class Parser {
     parseTime(time) {
         let d = new Date(this.start);
         let tSplit = time.match(/(\d+):(\d+)(am|pm)/);
-        let hr = tSplit[1] == '12' && tSplit[3] == 'am' ? 0 : tSplit[3] == 'pm' ? parseInt(tSplit[1]) + 13 : parseInt(tSplit[1]);
+        let hr = tSplit[1] == '12' && tSplit[3] == 'am' ? 0 : tSplit[3] == 'pm' ? parseInt(tSplit[1]) + 12 : parseInt(tSplit[1]);
         
-        d.setMilliseconds(0);
-        d.setSeconds(0);
-        d.setMinutes(tSplit[2]);
-        d.setHours(hr);
+        d.setHours(hr, tSplit[2], 0, 0);
         return d;
     }
 }

@@ -12,12 +12,14 @@ module.exports = class DataController {
     get programmes() {
         return this.parser.programmes;
     }
-
+/*
     get retrievedTime() {
         let dRetrieved = new Date();
-        dRetrieved.setMinutes(0);
-        dRetrieved.setMilliseconds(0);
+        dRetrieved.setMinutes(0, 0, 0);
         return dRetrieved;
+    }*/
+    get retrievedTime() {
+        return new Date('2017-05-29T20:00:00')
     }
 
     getData() {
