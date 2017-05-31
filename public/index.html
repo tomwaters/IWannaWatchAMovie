@@ -1,27 +1,34 @@
 <!DOCTYPE html>
 <html ng-app="iwwmApp">
     <head>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.4/angular.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
         <script src="js/iwwm.js"></script>
-        <style>
-            .movie-list {
-                list-style-type: none;
-                margin: 0;
-                padding: 0;
-            }
-            .movie-list li {
-                padding: 4px;
-                margin: 0 0 4px 0;
-                background-color: #aaa;
-                border-radius: 4px;
-                font-size: 1.5em;
-            }
-        </style>
+        <link rel="stylesheet" href="style/iwwm.css">
     </head>
     <body ng-controller="iwwmController">
-        <h1>test</h1>
-        <ul class="movie-list">
-            <li ng-repeat="movie in movies">{{movie.Start | date :'shortTime'}} - {{movie.Title}}</li>
-        </ul>
+        <h1>IWannaWatchAMovie</h1>
+        <div ng-show="!!selectedProg" class="pop-bg">
+            <div class="pop-content">
+                <div class="pop-close-outer">
+                    <span class="pop-close-inner" ng-click="selectedProg=null">X</span>
+                </div>
+                <h2>{{selectedProg.Title}}</h2>
+                <h3>{{selectedProg.Start | date:'shortTime'}} - {{selectedProg.End | date:'shortTime'}}</h3>
+                <h3>{{selectedProg.Channel}}</h3>
+                <h4>{{selectedProg.Category}}</h4>
+                <p>{{selectedProg.Description}}</p>
+            </div>
+        </div>
+        <div>
+            <ul class="filter-list" ng-init="mode='soon'">
+                <li ng-click="mode='now'" ng-class="{'selected':mode=='now'}">Now</li>
+                <li ng-click="mode='soon'" ng-class="{'selected':mode=='soon'}">Soon</li>
+                <li ng-click="mode='later'" ng-class="{'selected':mode=='later'}">Later</li>
+                <li ng-click="mode='all'" ng-class="{'selected':mode=='all'}">All</li>
+            </ul>
+            <ul class="movie-list">
+                <li ng-repeat="movie in movies | iwwmStart:mode" ng-click="$parent.selectedProg=movie">{{movie.Start | date :'shortTime'}} - {{movie.Title}}</li>
+            </ul>
+        </div>
     </body>
 </html>
