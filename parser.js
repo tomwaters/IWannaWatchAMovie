@@ -7,6 +7,8 @@ module.exports = class Parser {
     constructor() {
         this.start = '';
         this.end = '';
+        this.channels = [];
+        this.programmes = [];
     }
     parse(data, retrievedTime, retrievedHours) {
         this.start = retrievedTime;
