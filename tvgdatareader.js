@@ -1,6 +1,5 @@
 'use strict';
 const http = require('http');
-const fs = require('fs');
 
 module.exports = class TVGDataReader {
     getData(datetime, duration, success, error) {
@@ -20,9 +19,6 @@ module.exports = class TVGDataReader {
                 body += d;
             });
             response.on('end', function() {
-                fs.writeFile('data.txt', body, function(err) {
-                    error(err);
-                });
                 success(body);
             });
         }).on('error', function(e) {

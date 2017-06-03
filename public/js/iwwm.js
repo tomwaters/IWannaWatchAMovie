@@ -12,7 +12,7 @@ angular.module('iwwmApp', [])
                 return;
             }
 
-            let now = new Date('2017-05-29T20:00:00');//Date.now();
+            let now = Date.now();
             let modeSoon = new Date(now);
             modeSoon.setHours(modeSoon.getHours() + 2);
 

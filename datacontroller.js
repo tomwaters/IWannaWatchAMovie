@@ -58,7 +58,7 @@ module.exports = class DataController {
             self._parser.parse(data, self._retrievedTime, self.HoursToRetrieve);
             self._retriving = false;
 
-            self._fw.writeData(self.DataFolder, data, null, function(err) {
+            self._fw.writeData(self.DataFolder, data, null, function(){}, function(err) {
                 console.log('Error saving data\r\n' + err);
             });
             
