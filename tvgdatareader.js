@@ -3,7 +3,7 @@ const http = require('http');
 
 module.exports = class TVGDataReader {
     getData(datetime, duration, success, error) {
-        let date = this.padDate(datetime.getDate()) + '/' + this.padDate(datetime.getMonth() + 1) + '/' + datetime.getFullYear();
+        let date = this.padDate(datetime.getMonth() + 1) + '/' + this.padDate(datetime.getDate()) + '/' + datetime.getFullYear();
         let paddedDuration = this.padDate(duration);
 
         let path = '/?catcolor=000000&systemid=7&thistime=' + datetime.getHours() + '&thisday=' + date + '&gridspan=' + paddedDuration + ':00&view=0&gw=1323'

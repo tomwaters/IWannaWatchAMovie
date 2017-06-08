@@ -1,8 +1,9 @@
 'use strict';
 const FileDataReader = require('./filedatareader');
-const FileDataWriter = require('./filedatawriter');
-const TVGDataReader = require('./tvgdatareader');
 const Parser = require('./parser.js');
+const threads = require('threads');
+const spawn   = threads.spawn;
+const config  = threads.config;
 
 module.exports = class DataController {
     constructor() {
@@ -10,17 +11,29 @@ module.exports = class DataController {
         self.HoursToRetrieve = 6;
         self.DataFolder = './data/';
         self._fr = new FileDataReader();
-        self._fw = new FileDataWriter();
-        self._tvgr = new TVGDataReader();
         self._parser = new Parser();
         self._retrievedTime = null;
-        self._retriving = false;
+
+        config.set({
+            basepath : {
+                node    : __dirname
+            }
+        });
 
         // Get the most recent saved data
         self._fr.getData(self.DataFolder, function(data, lastModified) {
             self._retrievedTime = lastModified;
             self._parser.parse(data, lastModified, self.HoursToRetrieve);
-            self._startRetrieving();
+
+            // Figure out when to start retrieving
+            let dStart = new Date(self._retrievedTime);
+            dStart.setHours(dStart.getHours() + self.HoursToRetrieve - 2);
+            let startIn = dStart - Date.now();
+            startIn = startIn < 0 ? 0 : startIn;
+            setTimeout(function() {
+                self._startRetrieving();
+            }, startIn);
+
         }, function(err) {
             self._startRetrieving();
             if(err != 'IWWM_NODATA') {
@@ -30,42 +43,15 @@ module.exports = class DataController {
     }
 
     _startRetrieving() {
-        let dTest = new Date();
-        dTest.setHours(dTest.getHours() - this.HoursToRetrieve + 2);
-
-        // If it is older than 2hrs, get new data
-        if(this._retrievedTime == null || this._retrievedTime < dTest) {
-            this._retrieveData();
-        }
-        // while(true) {
-        //     if(!this._retrieving) {
-        //         this._retrieveData();
-        //     }
-        //     //wait a few hours
-        // }
-    }
-
-    // Retrieve data, set retrievedTime and save the data
-    _retrieveData() {
         let self = this;
-        self._retriving = true;
+        let thread = spawn('datacontroller_worker.js');
 
-        let dRetrieved = new Date();
-        dRetrieved.setMinutes(0, 0, 0);
-
-        self._tvgr.getData(dRetrieved, self.HoursToRetrieve, function(data) {
-            self._retrievedTime = dRetrieved;
-            self._parser.parse(data, self._retrievedTime, self.HoursToRetrieve);
-            self._retriving = false;
-
-            self._fw.writeData(self.DataFolder, data, null, function(){}, function(err) {
-                console.log('Error saving data\r\n' + err);
+        thread.send({ HoursToRetrieve: self.HoursToRetrieve,
+                        DataFolder: self.DataFolder})
+            .on('progress', function(progress) {
+                self._retrievedTime = progress.retrieved;
+                self._parser.parse(progress.data, self._retrievedTime, self.HoursToRetrieve);
             });
-            
-        }, function(err) {
-            console.log('Error retrieving data\r\n' + err);
-            self._retriving = false;
-        });
     }
 
     get programmes() {

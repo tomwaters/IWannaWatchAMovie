@@ -62,7 +62,7 @@ module.exports = class Parser {
             if(end < self.start) {
                 end.setDate(end.getDate() + 1);
             }
-            
+
             self.programmes.push({
                 Start: start,
                 End: end,
