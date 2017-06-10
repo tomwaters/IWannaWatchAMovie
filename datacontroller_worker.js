@@ -16,7 +16,7 @@ module.exports = function(input, done, progress) {
             }, function(err) {
                 console.log('Error saving data\r\n' + err);
             });
-            progress({retried: dRetrieved, data: data});
+            progress({retrieved: dRetrieved, data: data});
 
         }, function(err) {
             console.log('Error retrieving data\r\n' + err);
