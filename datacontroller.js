@@ -27,7 +27,7 @@ module.exports = class DataController {
 
             // Figure out when to start retrieving
             let dStart = new Date(self._retrievedTime);
-            dStart.setHours(dStart.getHours() + self.HoursToRetrieve - 2);
+            dStart.setHours(dStart.getHours() + self.HoursToRetrieve - 3);
             let startIn = dStart - Date.now();
             startIn = startIn < 0 ? 0 : startIn;
             setTimeout(function() {

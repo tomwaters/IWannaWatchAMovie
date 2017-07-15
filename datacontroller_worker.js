@@ -24,5 +24,5 @@ module.exports = function(input, done, progress) {
     }
 
     doRetrieve();
-    setInterval(doRetrieve, 1000 * 60 * 60 * input.HoursToRetrieve);
+    setInterval(doRetrieve, 1000 * 60 * 60 * (input.HoursToRetrieve - 3));
 };
