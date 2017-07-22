@@ -63,14 +63,54 @@ module.exports = class Parser {
                 end.setDate(end.getDate() + 1);
             }
 
-            self.programmes.push({
+            let newProgramme = {
                 Start: start,
                 End: end,
                 Title: title,
                 Channel: channel,
                 Category: category,
                 Description: description
-            });
+            };
+
+            if(self.favourHDSkip(newProgramme)) {
+                return;
+            }
+
+            if(!self.updateSplit(newProgramme)) {
+                self.programmes.push(newProgramme);
+            }
+        });
+    }
+
+    favourHDSkip(newProgramme) {
+        for(let i=0; i<this.programmes.length - 1; i++) {
+            let element = this.programmes[i];
+            if(element.Title == newProgramme.Title && element.Channel != newProgramme.Channel && 
+                (element.Start.getTime() == newProgramme.Start.getTime() || element.End.getTime() == newProgramme.End.getTime())) {
+                if(newProgramme.Channel.endsWith('HD') && element.Channel.startsWith(newProgramme.Channel.replace(/\s*HD/, ''))) {
+                    // if this is hd and we got sd, remove sd
+                    this.programmes.splice(i, 1);
+                    return false;
+                } else if(element.Channel.endsWith('HD') && newProgramme.Channel.startsWith(element.Channel.replace(/\s*HD/, ''))) {
+                    // if this is sd and we got hd, skip
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    // handle movies with a break (will break tv episodes)
+    updateSplit(newProgramme) {
+        return this.programmes.some(function(element) {
+            if(element.Title == newProgramme.Title && element.Channel == newProgramme.Channel) {
+                if(element.Start < newProgramme.Start) {
+                    element.End = newProgramme.End;
+                } else {
+                    element.Start = newProgramme.Start;
+                }
+                return true;
+            }
+            return false;
         });
     }
 

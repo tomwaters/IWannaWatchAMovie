@@ -6,7 +6,7 @@ module.exports = class TVGDataReader {
         let date = this.padDate(datetime.getMonth() + 1) + '/' + this.padDate(datetime.getDate()) + '/' + datetime.getFullYear();
         let paddedDuration = this.padDate(duration);
 
-        let path = '/?catcolor=000000&systemid=7&thistime=' + datetime.getHours() + '&thisday=' + date + '&gridspan=' + paddedDuration + ':00&view=0&gw=1323'
+        let path = '/?catcolor=000000&systemid=25&thistime=' + datetime.getHours() + '&thisday=' + date + '&gridspan=' + paddedDuration + ':00&view=0&gw=1323'
         let options = {
             host: 'www.tvguide.co.uk',
             port: 80,
