@@ -10,7 +10,7 @@ module.exports = class IWWMSlackBot {
         if(!token || !botName) {
             return;
         }
-        
+
         self.bot = new SlackBot({
             token: token,
             name: botName
@@ -27,12 +27,9 @@ module.exports = class IWWMSlackBot {
             if(message.type === 'message' && message.user != self.userId) {
                 let programmes = onGetProgrammes();
                 if(message.text.toLowerCase() === 'iwannawatchamovie') {
-                    if(message.channel === 'string' && message.channel[0] === 'C') {
-                        // channel message
+                    // channel or DM message
+                    if(typeof message.channel === 'string' && (message.channel[0] === 'C' || message.channel[0] === 'D')) {
                         self.bot.postMessage(message.channel, self.getSoon(programmes));
-                    } else {
-                        // direct message
-                        self.bot.postMessage(message.user, self.getSoon(programmes));
                     }
                 }
             }
