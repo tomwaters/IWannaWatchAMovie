@@ -22,9 +22,13 @@ module.exports = class IWWMSlackBot {
             });
         });
 
-        self.bot.on('message', function(message) {          
+        self.bot.on('close', function() {
+            self.bot.login();
+        });
+
+        self.bot.on('message', function(message) {
             // on messages not from this bot in a chat channel
-            if(message.type === 'message' && message.user != self.userId) {
+            if(message.type === 'message' && typeof message.text != 'undefined' && message.user != self.userId) {
                 let programmes = onGetProgrammes();
                 if(message.text.toLowerCase() === 'iwannawatchamovie') {
                     // channel or DM message
