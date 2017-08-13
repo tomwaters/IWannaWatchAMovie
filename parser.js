@@ -83,7 +83,7 @@ module.exports = class Parser {
     }
 
     favourHDSkip(newProgramme) {
-        for(let i=0; i<this.programmes.length - 1; i++) {
+        for(let i=0; i<this.programmes.length; i++) {
             let element = this.programmes[i];
             if(element.Title == newProgramme.Title && element.Channel != newProgramme.Channel && 
                 (element.Start.getTime() == newProgramme.Start.getTime() || element.End.getTime() == newProgramme.End.getTime())) {
